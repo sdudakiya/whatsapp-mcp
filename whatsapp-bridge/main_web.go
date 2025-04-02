@@ -283,9 +283,6 @@ func startRESTServer(client *whatsmeow.Client, port int) {
 }
 
 func main() {
-	
-	// Start REST API server
-	startRESTServer(client, 8081)
 
 	// Set up logger
 	// logger := waLog.Stdout("Client", "INFO", true)
@@ -325,6 +322,9 @@ func main() {
 		logger.Errorf("Failed to create WhatsApp client")
 		return
 	}
+
+	// Start REST API server
+	startRESTServer(client, 8081)
 
 	// Initialize message store
 	messageStore, err := NewMessageStore()
