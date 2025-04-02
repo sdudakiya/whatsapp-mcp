@@ -285,11 +285,11 @@ func startRESTServer(client *whatsmeow.Client, port int) {
 func main() {
 
 	// Set up logger
-	// logger := waLog.Stdout("Client", "INFO", true)
-	// logger.Infof("Starting WhatsApp client...")
+	logger := waLog.Stdout("Client", "INFO", true)
+	logger.Infof("Starting WhatsApp client...")
 
 	// Create database connection for storing session data
-	// dbLog := waLog.Stdout("Database", "INFO", true)
+	dbLog := waLog.Stdout("Database", "INFO", true)
 
 	// Create directory for database if it doesn't exist
 	if err := os.MkdirAll("store", 0755); err != nil {
