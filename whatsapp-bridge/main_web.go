@@ -25,7 +25,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mdp/qrterminal"
+	// "github.com/mdp/qrterminal"
 )
 
 // Message represents a chat message for our client
