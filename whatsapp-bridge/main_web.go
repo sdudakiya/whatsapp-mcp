@@ -386,7 +386,7 @@ func main() {
 		for evt := range qrChan {
 			if evt.Event == "code" {
 				qrCode = evt.Code
-				broadcastMessage("QR_CODE:data:image/png;base64," + evt.Code)
+				broadcastMessage("QR_CODE:" + evt.Code)
 				// broadcastMessage("OR_CODE:" + qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout))
 				fmt.Println("\nScan this QR code with your WhatsApp app:")
 				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
@@ -756,7 +756,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Send QR code if available
 	if qrCode != "" {
-		conn.WriteMessage(websocket.TextMessage, []byte("QR_CODE:data:image/png;base64," + qrCode))
+		conn.WriteMessage(websocket.TextMessage, []byte("QR_CODE:" + qrCode))
 	}
 
 	defer func() {
