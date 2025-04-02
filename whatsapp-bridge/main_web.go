@@ -25,7 +25,7 @@ import (
 	"google.golang.org/protobuf/proto"
 	
 	_ "github.com/mattn/go-sqlite3"
-	// "github.com/mdp/qrterminal"
+	"github.com/mdp/qrterminal"
 )
 
 // Message represents a chat message for our client
@@ -375,8 +375,8 @@ func main() {
 			if evt.Event == "code" {
 				qrCode = evt.Code
 				broadcastMessage("QR_CODE:" + evt.Code)
-				// fmt.Println("\nScan this QR code with your WhatsApp app:")
-				// qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
+				fmt.Println("\nScan this QR code with your WhatsApp app:")
+				qrterminal.GenerateHalfBlock(evt.Code, qrterminal.L, os.Stdout)
 			} else if evt.Event == "success" {
 				connected <- true
 				break
