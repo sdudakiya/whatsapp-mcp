@@ -774,7 +774,10 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>WhatsApp Client</title>
 	    <script>
-	        var socket = new WebSocket("ws://" + window.location.host + "/ws");
+	        // Use WSS if the page is served over HTTPS
+	        var protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+	        var socket = new WebSocket(protocol + window.location.host + "/ws");
+
 	        socket.onmessage = function(event) {
 	            var logDiv = document.getElementById("logs");
 	            if (event.data.startsWith("QR_CODE:")) {
@@ -793,6 +796,7 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	    <div id="logs"></div>
 	</body>
 	</html>`
+
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(htmlContent))
 }
