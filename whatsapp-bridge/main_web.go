@@ -773,6 +773,14 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>WhatsApp Client</title>
+	    <style>
+	        #qr {
+	            border: 1px solid #000;
+	            padding: 10px;
+	            max-width: 300px;
+	            margin-bottom: 20px;
+	        }
+	    </style>
 	    <script>
 	        // Use WSS if the page is served over HTTPS
 	        var protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
@@ -781,7 +789,8 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	        socket.onmessage = function(event) {
 	            var logDiv = document.getElementById("logs");
 	            if (event.data.startsWith("QR_CODE:")) {
-	                document.getElementById("qr").innerText = event.data.replace("QR_CODE:", "");
+	                var qrCodeData = event.data.replace("QR_CODE:", "");
+	                document.getElementById("qr").innerHTML = '<img src="' + qrCodeData + '" alt="QR Code" />';
 	            } else {
 	                logDiv.innerHTML += "<p>" + event.data + "</p>";
 	            }
@@ -791,7 +800,7 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	<body>
 	    <h2>WhatsApp Client</h2>
 	    <h3>QR Code:</h3>
-	    <pre id="qr">Waiting for QR Code...</pre>
+	    <div id="qr">Waiting for QR Code...</div>
 	    <h3>Logs:</h3>
 	    <div id="logs"></div>
 	</body>
