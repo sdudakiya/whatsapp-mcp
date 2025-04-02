@@ -756,7 +756,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Send QR code if available
 	if qrCode != "" {
-		conn.WriteMessage(websocket.TextMessage, []byte("QR_CODE:" + qrCode))
+		conn.WriteMessage(websocket.TextMessage, []byte("QR_CODE:data:image/png;base64," + qrCode))
 	}
 
 	defer func() {
