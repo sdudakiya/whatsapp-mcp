@@ -227,6 +227,21 @@ func sendWhatsAppMessage(client *whatsmeow.Client, recipient string, message str
 
 // Start a REST API server to expose the WhatsApp client functionality
 func startRESTServer(client *whatsmeow.Client, port int) {
+
+	
+	http.HandleFunc("/", serveHTML)
+	http.HandleFunc("/ws", wsHandler)
+	
+	// Handler for api page
+	http.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		// Only allow POST requests
+		fmt.Println("Received request to send message")
+		// Respond with "health"
+		w.Header().Set("Content-Type", "text/plain")
+		w.WriteHeader(http.StatusOK)
+		fmt.Fprintln(w, "health")
+		})
+	
 	// Handler for sending messages
 	http.HandleFunc("/api/send", func(w http.ResponseWriter, r *http.Request) {
 		// Only allow POST requests
@@ -235,9 +250,6 @@ func startRESTServer(client *whatsmeow.Client, port int) {
 			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 			return
 		}
-
-	http.HandleFunc("/", serveHTML)
-	http.HandleFunc("/ws", wsHandler)
 
 		// Parse the request body
 		var req SendMessageRequest
