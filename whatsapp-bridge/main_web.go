@@ -351,12 +351,12 @@ func main() {
 		switch v := evt.(type) {
 		case *events.Message:
 			// Process regular messages
-			// handleMessage(client, messageStore, v, logger)
+			handleMessage(client, messageStore, v, logger)
 			broadcastMessage(fmt.Sprintf("New message received from %s", v.Info.Sender.User))
 
 		case *events.HistorySync:
 			// Process history sync events
-			// handleHistorySync(client, messageStore, v, logger)
+			handleHistorySync(client, messageStore, v, logger)
 			broadcastMessage("History sync received")
 
 		case *events.Connected:
