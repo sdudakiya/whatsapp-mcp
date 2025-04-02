@@ -767,13 +767,14 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 // Serve the HTML page
 func serveHTML(w http.ResponseWriter, r *http.Request) {
-	htmlContent := `
+	htmlContent := ` 
 	<!DOCTYPE html>
 	<html lang="en">
 	<head>
 	    <meta charset="UTF-8">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <title>WhatsApp Client</title>
+	    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 	    <style>
 	        #qr {
 	            border: 1px solid #000;
@@ -781,27 +782,48 @@ func serveHTML(w http.ResponseWriter, r *http.Request) {
 	            max-width: 300px;
 	            margin-bottom: 20px;
 	        }
+	        #qrCodeData {
+	            font-family: monospace;
+	            white-space: pre-wrap;
+	            background: #f9f9f9;
+	            padding: 10px;
+	            border: 1px solid #ccc;
+	            margin-top: 10px;
+	            overflow-x: auto;
+	        }
 	    </style>
 	    <script>
-	        // Use WSS if the page is served over HTTPS
 	        var protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
 	        var socket = new WebSocket(protocol + window.location.host + "/ws");
 
 	        socket.onmessage = function(event) {
 	            var logDiv = document.getElementById("logs");
 	            if (event.data.startsWith("QR_CODE:")) {
-	                var qrCodeData = event.data.replace("QR_CODE:", "");
-	                document.getElementById("qr").innerHTML = '<img src="' + qrCodeData + '" alt="QR Code" />';
+	                var qrCodeData = event.data.replace("QR_CODE:", "").trim();
+	                
+	                // Generate QR code using qrcode.js
+	                QRCode.toCanvas(document.getElementById("qr"), qrCodeData, function (error) {
+	                    if (error) console.error(error);
+	                    console.log('QR code generated!');
+	                });
+
+	                document.getElementById("qrCodeData").textContent = formatQRCodeData(qrCodeData);
 	            } else {
 	                logDiv.innerHTML += "<p>" + event.data + "</p>";
 	            }
 	        };
+
+	        function formatQRCodeData(data) {
+	            return data.match(/.{1,64}/g).join("\n");
+	        }
 	    </script>
 	</head>
 	<body>
 	    <h2>WhatsApp Client</h2>
 	    <h3>QR Code:</h3>
-	    <div id="qr">Waiting for QR Code...</div>
+	    <canvas id="qr"></canvas>
+	    <h3>QR Code Data:</h3>
+	    <div id="qrCodeData">Waiting for QR Code Data...</div>
 	    <h3>Logs:</h3>
 	    <div id="logs"></div>
 	</body>
