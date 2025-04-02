@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"log"
 	"os/signal"
 	"reflect"
 	"strings"
